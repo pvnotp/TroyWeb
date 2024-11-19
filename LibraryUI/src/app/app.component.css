@@ -1,0 +1,11 @@
+.active{
+    background-color: blue;
+}
+
+.not-active{
+    background-color: green;
+}
+
+.apple{
+    background-color: red;
+}

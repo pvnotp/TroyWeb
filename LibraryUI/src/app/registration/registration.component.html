@@ -1,0 +1,21 @@
+<div class="mb-4 h2 text-success">
+  Sign up
+</div>
+
+<div class="mb-3">
+  <input type="text" [(ngModel)] = "userName">
+</div>
+<div>
+  <p>Select A Role:</p>
+  <select [(ngModel)]="role">
+    <option value="Customer">Customer</option>
+    <option value="Librarian">Librarian</option>
+  </select>
+
+  <div class="mt-4">
+    <button (click)="onSubmit()" class="btn btn-success w-100 rounded-3">
+      Sign up!
+    </button>
+  </div>
+</div>
+
