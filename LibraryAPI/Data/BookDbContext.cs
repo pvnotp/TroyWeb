@@ -12,14 +12,14 @@ namespace LibraryAPI.Data
     {
         public required DbSet<Book> Books { get; set; }
 
-        public BookDbContext() : base()
-        {
-
-        }
+        public BookDbContext(DbContextOptions<BookDbContext> options) : base(options){}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            var stock = new Faker<Book>()
+            builder.HasDefaultSchema("Book");
+
+            var faker = new Faker<Book>()
+                .RuleFor(b => b.Id, f => Guid.NewGuid())
                 .RuleFor(b => b.Title, f => f.Lorem.Sentence(2, 8))
                 .RuleFor(b => b.Author, f => f.Person.FullName)
                 .RuleFor(b => b.Description, f => f.Lorem.Sentence(10, 30))
@@ -32,10 +32,8 @@ namespace LibraryAPI.Data
                 .RuleFor(b => b.PageCount, f => new Random().Next(1000));
 
             // generate 1000 items
-            var modelBuilder = new ModelBuilder();
-
-            modelBuilder.Entity<Book>()
-                .HasData(stock.GenerateBetween(1000, 1000));
+            builder.Entity<Book>()
+                .HasData(faker.GenerateBetween(1000, 1000));
         }
 
         private string GetRandomBookCategory()

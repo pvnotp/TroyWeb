@@ -9,15 +9,14 @@ namespace LibraryAPI.Data
     {
         public required DbSet<IdentityUser> IdentityUsers { get; set; }
 
-        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
-        {
-
-        }
+        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options){}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.HasDefaultSchema("User");
             builder.ApplyConfiguration(new RoleConfiguration());
+            
         }
 
     }
