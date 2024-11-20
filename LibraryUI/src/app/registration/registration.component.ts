@@ -25,7 +25,6 @@ export class RegistrationComponent {
     this.service.createUser(userData)
       .subscribe({
         next: (res: any) => {
-          console.log("HELLO");
           this.registrationCompletedEvent.emit(true);
         },
       });

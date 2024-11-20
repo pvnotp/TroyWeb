@@ -31,7 +31,7 @@ namespace LibraryAPI.Controllers
             var books = await _bookContext.Books.ToListAsync();
             var featuredBooks = new List<Book>();
             var random = new Random();
-            for (var i = 0; i <= 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 featuredBooks.Add(books[random.Next(0, books.Count)]);
             }

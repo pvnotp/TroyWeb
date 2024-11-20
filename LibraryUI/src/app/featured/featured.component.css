@@ -1,15 +1,57 @@
-.bookCover {
+/* Structure */
+.example-container {
   position: relative;
 }
 
-img {
-  height: 100%;
-  width: 100%;
-  opacity: 0.8;
+.example-table-container {
+  position: relative;
+  min-height: 200px;
+  max-height: 1000px;
+  overflow: auto;
 }
 
-#exp {
+table {
+  width: 100%;
+}
+
+.example-loading-shade {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+
+.book-cover {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.mat-column-title {
+  width: 200px;
+}
+
+.mat-column-author {
+  width: 60px;
+}
+
+.mat-column-rating {
+  width: 20px;
+}
+
+.mat-column-checkOut {
+  width: 20px;
 }
