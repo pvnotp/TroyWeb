@@ -1,1 +1,16 @@
-<p>featured works!</p>
+<h2> Featured Books </h2>
+
+@for (item of books; track item.id){
+<mat-grid-list cols="2" rowHeight="5:1">
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <div>
+      <div class='bookCover'>
+        <img src={{item.coverImage}} class="img-fluid ">
+        <p id="exp">{{item.title}} <br> {{item.author}} </p>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>{{item.description}}</mat-grid-tile>
+  <mat-grid-tile>{{item.userRating}}</mat-grid-tile>
+</mat-grid-list>
+}
