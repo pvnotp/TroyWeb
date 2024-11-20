@@ -4,10 +4,14 @@ import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/mat
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePipe } from '@angular/common';
 import { BookService } from '../shared/services/book.service';
+
+
 
 /**
  * @title Table retrieving data through HTTP
@@ -17,16 +21,14 @@ import { BookService } from '../shared/services/book.service';
   styleUrl: 'featured.component.css',
   templateUrl: 'featured.component.html',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe],
+  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule],
 })
 export class FeaturedComponent implements AfterViewInit {
   private _httpClient = inject(HttpClient);
 
   displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'checkOut'];
-
-  exampleDatabase: ExampleHttpDatabase = new ExampleHttpDatabase(this._httpClient);
   bookService: BookService = new BookService(this._httpClient);
-  data: GithubIssue[] = [];
+  bookData: any;
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -36,7 +38,7 @@ export class FeaturedComponent implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
   ngAfterViewInit() {
-    this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
+
 
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
@@ -68,31 +70,40 @@ export class FeaturedComponent implements AfterViewInit {
           return data;
         }),
       )
-      .subscribe(data => (this.data = data));
+      .subscribe(data => (
+        this.bookData = new MatTableDataSource(data)));
+
   }
-}
 
-export interface GithubApi {
-  items: GithubIssue[];
-  total_count: number;
-}
-
-export interface GithubIssue {
-  created_at: string;
-  number: string;
-  state: string;
-  title: string;
-}
-
-/** An example database that the data source uses to retrieve data for the table. */
-export class ExampleHttpDatabase {
-  constructor(private _httpClient: HttpClient) { }
-
-  getRepoIssues(sort: string, order: SortDirection, page: number): Observable<GithubApi> {
-    const href = 'https://api.github.com/search/issues';
-    const requestUrl = `${href}?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1
-      }`;
-
-    return this._httpClient.get<GithubApi>(requestUrl);
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.bookData.filter = filterValue.trim().toLowerCase();
   }
+
+  
 }
+
+//export interface GithubApi {
+//  items: GithubIssue[];
+//  total_count: number;
+//}
+
+//export interface GithubIssue {
+//  created_at: string;
+//  number: string;
+//  state: string;
+//  title: string;
+//}
+
+///** An example database that the data source uses to retrieve data for the table. */
+//export class ExampleHttpDatabase {
+//  constructor(private _httpClient: HttpClient) { }
+
+//  getRepoIssues(sort: string, order: SortDirection, page: number): Observable<GithubApi> {
+//    const href = 'https://api.github.com/search/issues';
+//    const requestUrl = `${href}?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1
+//      }`;
+
+//    return this._httpClient.get<GithubApi>(requestUrl);
+//  }
+//}
