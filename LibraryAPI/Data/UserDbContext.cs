@@ -1,7 +1,8 @@
-﻿using LibraryAPI.SeedConfiguration;
+﻿using Bogus.DataSets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LibraryAPI.Data
 {
@@ -15,9 +16,24 @@ namespace LibraryAPI.Data
         {
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("User");
-            builder.ApplyConfiguration(new RoleConfiguration());
-            
+            builder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole
+                    {
+                        Id = "382c74c3-721d-4f34-80e5-57657b6cbc27",
+                        Name = "Customer",
+                        NormalizedName = "CUSTOMER",
+                    },
+                    new IdentityRole
+                    {
+                        Id = "6B29FC40-CA47-1067-B31D-00DD010662DA",
+                        Name = "Librarian",
+                        NormalizedName = "LIBRARIAN",
+                    }
+                );
         }
+
+ 
 
     }
 }

@@ -1,8 +1,10 @@
+using System.Data.Entity;
 using LibraryAPI.Data;
 using LibraryAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Hosting;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,8 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 builder.Services.AddDbContext<BookDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookDbConnection"))
     .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
+
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UserDbContext>();
@@ -42,6 +46,17 @@ else
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var userContext = services.GetRequiredService<UserDbContext>();
+    userContext.Database.Migrate();
+
+    var bookContext = services.GetRequiredService<BookDbContext>();
+    bookContext.Database.Migrate();
+}
 
 app.Run();
 
