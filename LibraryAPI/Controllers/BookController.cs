@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using LibraryAPI.Data;
 using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +38,34 @@ namespace LibraryAPI.Controllers
                 featuredBooks.Add(books[random.Next(0, books.Count)]);
             }
             return Ok(featuredBooks);
+        }
+
+        [HttpGet("getMatching")]
+        public async Task<IActionResult> GetBooksBySearchTerm(string searchTerm)
+        {
+            var books = await _bookContext.Books.ToListAsync();
+            var bookMatches = books.Where(x => x.Title.Contains(searchTerm));
+            return Ok(bookMatches);
+        }
+
+        [HttpPost("checkOut")]
+        public async Task<IActionResult> CheckOutBook([FromBody] JsonObject checkoutData)
+        {
+
+            var bookId = checkoutData["bookId"].ToString();
+            var book = await _bookContext.FindAsync<Book>(new Guid(bookId));
+            if (book == null)
+            {
+                Console.WriteLine($"Book {bookId} was not found");
+                return BadRequest();
+            }
+            _bookContext.Books.Update(book);
+
+            var userId = checkoutData["userId"].ToString();
+            book.CheckedOutBy = new Guid(userId);
+            _bookContext.SaveChanges();
+            
+            return Ok(book);
         }
 
     }

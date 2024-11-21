@@ -17,7 +17,8 @@ namespace LibraryAPI.Models
         public string ISBN {  get; set; }
         public int PageCount { get; set; }
         public string[]? Reviews { get; set; }
-        public string? CheckedOutBy { get; set; }
+        public Guid? CheckedOutBy { get; set; }
+        public DateTime DueDate { get; set; }
 
     }
 }

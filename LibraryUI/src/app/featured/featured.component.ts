@@ -1,17 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { BookService } from '../shared/services/book.service';
-
-
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { UserService } from '../shared/services/user.service';
 
 /**
  * @title Table retrieving data through HTTP
@@ -20,90 +21,92 @@ import { BookService } from '../shared/services/book.service';
   selector: 'featured-component',
   styleUrl: 'featured.component.css',
   templateUrl: 'featured.component.html',
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule],
+  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe],
 })
 export class FeaturedComponent implements AfterViewInit {
-  private _httpClient = inject(HttpClient);
-
+  _httpClient = inject(HttpClient);
   displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'checkOut'];
   bookService: BookService = new BookService(this._httpClient);
-  bookData: any;
 
+  bookData: MatTableDataSource<Book> = new MatTableDataSource<Book>();
+  displayedBooks: MatTableDataSource<Book> = new MatTableDataSource<Book>();
+  expandedElement: Book | null = null;
+  searchInput = new Subject<string>();
   resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
+  userId: string = "";
 
-  @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  ngAfterViewInit() {
-
-
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          return this.bookService.getFeaturedBooks(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-          ).pipe(catchError(() => observableOf(null)));
-        }),
-        map(data => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.isRateLimitReached = data === null;
-
-          if (data === null) {
-            return [];
-          }
-
-          // Only refresh the result length if there is new data. In case of rate
-          // limit errors, we do not want to reset the paginator to zero, as that
-          // would prevent users from re-triggering requests.
-
-          return data;
-        }),
-      )
-      .subscribe(data => (
-        this.bookData = new MatTableDataSource(data)));
-
+  constructor(private userService: UserService) {
+    this.userService.getUserId().subscribe(id => this.userId = id);
   }
+
+  ngAfterViewInit() {
+    this.displayedBooks.sort = this.sort;
+
+    this.bookService.getFeaturedBooks(this.sort.active, this.sort.direction)
+      .subscribe(
+        data => this.bookData = new MatTableDataSource(data));
+
+    this.searchInput.pipe(
+      debounceTime(300)
+    ).subscribe((searchTerm: string) => {
+      this.bookService.getMatchingBooks(this.sort.active, this.sort.direction, searchTerm)
+        .subscribe(
+          data => this.bookData = new MatTableDataSource(data));
+    });
+  }
+
+  updateSearch(event: Event) {
+    this.searchInput.next((event.target as HTMLInputElement).value);
+   }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.bookData.filter = filterValue.trim().toLowerCase();
   }
 
-  
+  checkOutBook(bookId: string) {
+
+    this.userService.getUserId()
+      .subscribe(
+        id => { this.userId = id }
+    )
+    const userData = {
+      "userId": this.userId,
+      "bookId": bookId
+    }
+    this.bookService.checkoutBook(userData)
+      .subscribe({
+        next: (res: any) => {
+        }
+      });
+  }
+ 
 }
 
-//export interface GithubApi {
-//  items: GithubIssue[];
-//  total_count: number;
-//}
+export interface Book {
+  id: string;
+  title: string;
+  coverImage: number;
+  author: number;
+  rating: string;
+  description: string;
+  publisher: string;
+  publicationDate: any;
+  category: string;
+  ISBN: string;
+  pageCount: number;
+  reviews: string[]
+}
 
-//export interface GithubIssue {
-//  created_at: string;
-//  number: string;
-//  state: string;
-//  title: string;
-//}
 
-///** An example database that the data source uses to retrieve data for the table. */
-//export class ExampleHttpDatabase {
-//  constructor(private _httpClient: HttpClient) { }
-
-//  getRepoIssues(sort: string, order: SortDirection, page: number): Observable<GithubApi> {
-//    const href = 'https://api.github.com/search/issues';
-//    const requestUrl = `${href}?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1
-//      }`;
-
-//    return this._httpClient.get<GithubApi>(requestUrl);
-//  }
-//}

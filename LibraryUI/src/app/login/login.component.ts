@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { RegistrationComponent } from '../registration/registration.component';
 import { UserService } from '../shared/services/user.service';
 import { FormsModule } from '@angular/forms';
@@ -27,13 +27,15 @@ export class LoginComponent {
     this.isNewUser = !$event;
   }
 
+  @Output() userLoggedInEvent = new EventEmitter<string>();
+
   login() {
-  
     this.userService.getUser(this.userName)
       .subscribe({
         next: (res: any) => {
           this.authService.login();
-          this.router.navigate(['/featured']); 
+          this.userService.setUserId(res.id);
+          this.router.navigate(['/featured']);
         }
       });
 
