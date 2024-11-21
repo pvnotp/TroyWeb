@@ -50,6 +50,10 @@ export class FeaturedComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.userService.getUserRole()
+      .subscribe(
+        role => { this.userRole = role }
+    );
 
     this.bookService.getFeaturedBooks()
       .subscribe(
@@ -130,14 +134,13 @@ export class FeaturedComponent implements AfterViewInit {
         var dueDate = new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000);
         return "Due on " + dueDate.toDateString();
       } else {
-        return "Due on " + book.dueDate;
+        return "Due on " + new Date(book.dueDate).toDateString();
       }
-      
     }
+      
   }
 
   checkOutDisabled(book: Book) {
-    console.log(this.userRole);
     if (this.userRole == "Librarian") {
       return false;
     } else {
