@@ -42,6 +42,7 @@ export class LoginComponent {
     this.authService.getRole(this.userName)
       .subscribe({
         next: (res: any) => {
+          this.userService.setUserRole(res);
         },
       });
   }

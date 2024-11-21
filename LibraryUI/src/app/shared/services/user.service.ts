@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class UserService {
 
   userId = new BehaviorSubject("");
+  role = new BehaviorSubject("");
   baseURL = 'http://localhost:5274/api';
   constructor(private http: HttpClient) { }
 
@@ -28,6 +29,14 @@ export class UserService {
 
   getUserId() {
     return this.userId.asObservable();
+  }
+
+  setUserRole(role: string) {
+    this.role.next(role);
+  }
+
+  getUserRole() {
+    return this.role.asObservable();
   }
 
 }

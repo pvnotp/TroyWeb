@@ -33,15 +33,15 @@ import { UserService } from '../shared/services/user.service';
 })
 export class FeaturedComponent implements AfterViewInit {
   _httpClient = inject(HttpClient);
-  displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'checkOut'];
+  displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'availability', 'checkOut'];
   bookService: BookService = new BookService(this._httpClient);
 
   bookData: MatTableDataSource<Book> = new MatTableDataSource<Book>();
-  displayedBooks: MatTableDataSource<Book> = new MatTableDataSource<Book>();
   expandedElement: Book | null = null;
   searchInput = new Subject<string>();
   resultsLength = 0;
   userId: string = "";
+  userRole: string = "";
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
@@ -50,20 +50,26 @@ export class FeaturedComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.displayedBooks.sort = this.sort;
 
-    this.bookService.getFeaturedBooks(this.sort.active, this.sort.direction)
+    this.bookService.getFeaturedBooks()
       .subscribe(
-        data => this.bookData = new MatTableDataSource(data));
+        data => {
+          this.bookData = new MatTableDataSource(data);
+          this.bookData.sort = this.sort;
+        });
 
     this.searchInput.pipe(
       debounceTime(300)
     ).subscribe((searchTerm: string) => {
-      this.bookService.getMatchingBooks(this.sort.active, this.sort.direction, searchTerm)
+      this.bookService.getMatchingBooks(searchTerm)
         .subscribe(
-          data => this.bookData = new MatTableDataSource(data));
+          data => {
+            this.bookData = new MatTableDataSource(data);
+            this.bookData.sort = this.sort;
+          });
     });
   }
+
 
   updateSearch(event: Event) {
     this.searchInput.next((event.target as HTMLInputElement).value);
@@ -75,21 +81,76 @@ export class FeaturedComponent implements AfterViewInit {
     this.bookData.filter = filterValue.trim().toLowerCase();
   }
 
-  checkOutBook(bookId: string) {
-
+  checkBook(book: Book) {
     this.userService.getUserId()
       .subscribe(
         id => { this.userId = id }
-    )
+      );
+
+    this.userService.getUserRole()
+      .subscribe(
+        role => { this.userRole = role }
+    );
+
+    if (book.checkedOutBy && this.userRole == "Librarian") {
+      this.checkInBook(book);
+    } else {
+      this.checkOutBook(book);
+    }
+  }
+
+  checkInBook(book: Book) {
+    this.bookService.checkInBook({ "bookId": book.id }).subscribe(() => { });
+
+    book.checkedOutBy = "";
+    book.checkOutDisabled == false; 
+  }
+
+  checkOutBook(book: Book) {
     const userData = {
       "userId": this.userId,
-      "bookId": bookId
+      "bookId": book.id
     }
-    this.bookService.checkoutBook(userData)
-      .subscribe({
-        next: (res: any) => {
-        }
-      });
+    this.bookService.checkoutBook(userData).subscribe(() => { });
+
+    book.checkedOutBy = this.userId;
+    if (this.userRole != "Librarian") {
+      book.checkOutDisabled == true;
+    }
+
+  }
+
+  displayAvailability(book: Book) {
+    if (!book.checkedOutBy) {
+      return "Available";
+    } else {
+
+      if (book.dueDate.toString() == "0001-01-01T00:00:00") {
+        //book has just been checked out but due date hasn't been loaded from the database yet.
+        var dueDate = new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000);
+        return "Due on " + dueDate.toDateString();
+      } else {
+        return "Due on " + book.dueDate;
+      }
+      
+    }
+  }
+
+  checkOutDisabled(book: Book) {
+    console.log(this.userRole);
+    if (this.userRole == "Librarian") {
+      return false;
+    } else {
+      return book.checkedOutBy ? true : book.checkOutDisabled;
+    }
+  }
+
+  getBookCheckButtonLabel(book: Book) {
+    if (this.userRole == "Librarian" && book.checkedOutBy) {
+      return "Check In";
+    } else {
+      return "Check Out";
+    }
   }
  
 }
@@ -107,6 +168,9 @@ export interface Book {
   ISBN: string;
   pageCount: number;
   reviews: string[]
+  checkedOutBy: string;
+  dueDate: Date;
+  checkOutDisabled: boolean | undefined;
 }
 
 

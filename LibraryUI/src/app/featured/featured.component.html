@@ -15,7 +15,7 @@
 
     <table mat-table [dataSource]="bookData" multiTemplateDataRows class="example-table"
            matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
-  
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
       <!--Cover Image Column-->
@@ -48,12 +48,18 @@
         <td mat-cell *matCellDef="let row">{{row.userRating}}</td>
       </ng-container>
 
+      <!--Availability Column-->
+      <ng-container matColumnDef="availability">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+        <td mat-cell *matCellDef="let row">{{displayAvailability(row)}}</td>
+      </ng-container>
+
       <!--Check Out Column-->
       <ng-container matColumnDef="checkOut">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let row">
-          <button [disabled]="row.checkedOutBy != null" (click)="checkOutBook(row.id)">
-          Check Out</button></td>
+          <button [disabled]="checkOutDisabled(row)" (click)="checkBook(row)">
+          {{getBookCheckButtonLabel(row)}}</button></td>
       </ng-container>
 
 

@@ -63,8 +63,30 @@ namespace LibraryAPI.Controllers
 
             var userId = checkoutData["userId"].ToString();
             book.CheckedOutBy = new Guid(userId);
+            book.DueDate = DateTime.Now.AddDays(5);
             _bookContext.SaveChanges();
             
+            return Ok(book);
+        }
+
+
+        [HttpPost("checkIn")]
+        public async Task<IActionResult> CheckInBook([FromBody] JsonObject checkInData)
+        {
+
+            var bookId = checkInData["bookId"].ToString();
+            var book = await _bookContext.FindAsync<Book>(new Guid(bookId));
+            if (book == null)
+            {
+                Console.WriteLine($"Book {bookId} was not found");
+                return BadRequest();
+            }
+            _bookContext.Books.Update(book);
+
+            book.CheckedOutBy = null;
+            book.DueDate = new DateTime();
+            _bookContext.SaveChanges();
+
             return Ok(book);
         }
 

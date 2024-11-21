@@ -52,6 +52,10 @@ table {
   width: 20px;
 }
 
+.mat-column-availability{
+  width: 20px;
+}
+
 .mat-column-checkOut {
   width: 20px;
 }
