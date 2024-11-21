@@ -18,9 +18,9 @@ import { UserService } from '../shared/services/user.service';
  * @title Table retrieving data through HTTP
  */
 @Component({
-  selector: 'featured-component',
-  styleUrl: 'featured.component.css',
-  templateUrl: 'featured.component.html',
+  selector: 'bookView-component',
+  styleUrl: 'bookView.component.css',
+  templateUrl: 'bookView.component.html',
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
@@ -31,7 +31,7 @@ import { UserService } from '../shared/services/user.service';
   standalone: true,
   imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe],
 })
-export class FeaturedComponent implements AfterViewInit {
+export class BookViewComponent implements AfterViewInit {
   _httpClient = inject(HttpClient);
   displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'availability', 'checkOut'];
   bookService: BookService = new BookService(this._httpClient);

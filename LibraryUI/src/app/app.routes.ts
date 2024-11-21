@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component'
-import { FeaturedComponent } from './featured/featured.component'
+import { BookViewComponent } from './bookView/bookView.component'
 import { EditorComponent } from './editor/editor.component'
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { AuthGuard } from './shared/auth.guard'
@@ -16,7 +16,7 @@ export const routes: Routes = [
   {
     path: 'featured',
     title: 'Featured Books',
-    component: FeaturedComponent,
+    component: BookViewComponent,
     canActivate: [AuthGuard]
   },
   {
