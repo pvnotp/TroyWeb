@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output } from '@angular/core';
 import { UserService } from '../shared/services/user.service';
 import { FormsModule } from '@angular/forms';

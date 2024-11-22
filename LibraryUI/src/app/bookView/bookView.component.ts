@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
-import { merge, Observable, of as observableOf, Subject } from 'rxjs';
-import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
+import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { of as observableOf, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
@@ -32,7 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
     ]),
   ],
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe, MatButtonModule],
+  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe, MatButtonModule],
 })
 export class BookViewComponent implements AfterViewInit {
   httpClient = inject(HttpClient);

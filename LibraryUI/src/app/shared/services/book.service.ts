@@ -1,7 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Sort, SortDirection } from '@angular/material/sort';
-import { Data } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Book } from '../models/Book'
 

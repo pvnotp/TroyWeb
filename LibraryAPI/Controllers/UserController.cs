@@ -1,11 +1,7 @@
 ﻿using System.Text.Json.Nodes;
-using System.Web.Http.Cors;
-using LibraryAPI.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
+
 
 namespace Library.Controllers
 {
