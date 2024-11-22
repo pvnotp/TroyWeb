@@ -1,9 +1,9 @@
 /* Structure */
-.example-container {
+.container {
   position: relative;
 }
 
-.example-table-container {
+.table-container {
   position: relative;
   min-height: 200px;
   max-height: 1000px;
@@ -12,24 +12,6 @@
 
 table {
   width: 100%;
-}
-
-.example-loading-shade {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 56px;
-  right: 0;
-  background: rgba(0, 0, 0, 0.15);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.example-rate-limit-reached {
-  max-width: 360px;
-  text-align: center;
 }
 
 /* Column Widths */
@@ -60,59 +42,35 @@ table {
   width: 20px;
 }
 
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-
-tr.example-detail-row {
+tr.detail-row {
   height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.book-row:not(.expanded-row):hover {
   background: whitesmoke;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.book-row:not(.expanded-row):active {
   background: #efefef;
 }
 
-.example-element-row td {
+.book-row td {
   border-bottom-width: 0;
 }
 
-.example-element-detail {
+.book-detail {
   overflow: hidden;
   display: flex;
 }
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
+.wide-input {
+   width: 100%;
 }
 
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
-}
-
-.box2 {
+.top-field {
   display: inline-block;
-  width: 40%;
-  height: 100px;
+  width: 45%;
+  height: 40%;
   margin: 1em;
 }
+

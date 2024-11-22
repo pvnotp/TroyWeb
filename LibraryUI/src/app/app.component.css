@@ -1,11 +1,8 @@
-.active{
-    background-color: blue;
-}
-
-.not-active{
-    background-color: green;
-}
-
-.apple{
-    background-color: red;
+h1 {
+  font-family: Helvetica;
+  font-size: 50px;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1;
+  text-align: center;
 }

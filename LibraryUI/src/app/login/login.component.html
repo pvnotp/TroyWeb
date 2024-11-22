@@ -1,22 +1,18 @@
 <div class="container">
-  <div class="row vh-100 align-items-center">
-    <div class="col-lg-4 offset-lg-4 col-md-8 offset-md-2 col-10 offset-1">
-      <div class="rounded-4 border-0 shadow-lg bg-white" style="min-height:450px;">
-        <div class="d-flex justify-content-start align-items-center">
-          <div class="p-5 w-100">
-            @if(isNewUser){
-            <app-registration (registrationCompletedEvent)="receiveRegistrationCompletedEvent($event)"></app-registration>
-            }
-            @else{
-            <div class="mb-3">
-              <input type="text" [(ngModel)]="userName">
-            </div>
-            <button (click)="login()">Log in</button>
-            <button (click)="initializeNewUserState()">Enroll New User</button>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
+  @if(isNewUser){
+  <app-registration (registrationCompletedEvent)="receiveRegistrationCompletedEvent($event)"></app-registration>
+  }
+  @else{
+  <div>
+    <mat-form-field>
+      <mat-label>Enter your username</mat-label>
+      <input matInput [(ngModel)]="userName">
+    </mat-form-field>
   </div>
+
+  <div>
+    <button mat-flat-button (click)="login()">Log in</button>
+    <button mat-flat-button (click)="initializeNewUserState()">Enroll New User</button>
+  </div>
+  }
 </div>

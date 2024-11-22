@@ -1,14 +1,14 @@
-<div class="example-container mat-elevation-z8">
+<div class="container">
 
-  <div class="box2">
-    <mat-form-field>
+  <div class="top-field">
+    <mat-form-field class="wide-input">
       <mat-label>Search for your favorite titles</mat-label>
       <input matInput (keyup)="updateSearch($event)" #input>
     </mat-form-field>
   </div>
 
-  <div class="box2">
-    <mat-form-field>
+  <div class="top-field">
+    <mat-form-field class="wide-input">
       <mat-label>Filter results by title, author, or description</mat-label>
       <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
@@ -18,9 +18,10 @@
     <button mat-flat-button (click)="addBook()">Add Book</button>
   }
 
-  <div class="example-table-container">
 
-    <table mat-table [dataSource]="bookData" multiTemplateDataRows class="example-table"
+  <div class="table-container">
+
+    <table mat-table [dataSource]="bookData" multiTemplateDataRows class="table"
            matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -65,7 +66,7 @@
       <ng-container matColumnDef="checkOut">
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let row">
-          <button [disabled]="checkOutDisabled(row)" (click)="checkBook(row)">
+          <button mat-flat-button [disabled]="checkOutDisabled(row)" (click)="checkBook(row)">
             {{getBookCheckButtonLabel(row)}}
           </button>
         </td>
@@ -86,27 +87,27 @@
 
       <!--Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-          <div class="example-element-detail"
-               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-            <div class="example-element-description">
-              Publisher: {{element.publisher}} <br />
-              Publication Date: {{element.publicationDate | date}} <br />
-              Category: {{element.category}} <br />
-              ISBN: {{element.isbn}} <br />
-              Page Count: {{element.pageCount}} <br />
+        <td mat-cell *matCellDef="let book" [attr.colspan]="displayedColumns.length">
+          <div class="book-detail"
+               [@detailExpand]="book == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="book-description">
+              Publisher: {{book.publisher}} <br />
+              Publication Date: {{book.publicationDate | date}} <br />
+              Category: {{book.category}} <br />
+              ISBN: {{book.isbn}} <br />
+              Page Count: {{book.pageCount}} <br />
             </div>
           </div>
         </td>
       </ng-container>
 
 
-      <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-          class="example-element-row"
-          [class.example-expanded-row]="expandedElement === element"
-          (click)="expandedElement = expandedElement === element ? null : element">
+      <tr mat-row *matRowDef="let book; columns: displayedColumns;"
+          class="book-row"
+          [class.expanded-row]="expandedElement === book"
+          (click)="expandedElement = expandedElement === book ? null : book">
       </tr>
-      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 
 
       <tr class="mat-row" *matNoDataRow>

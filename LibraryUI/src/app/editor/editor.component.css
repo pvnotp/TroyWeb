@@ -1,22 +1,8 @@
-.example-full-width {
+.wide-width {
   width: 90%;
 }
 
-.example-full-width {
+.textarea-wide-width {
   width: 90%;
   height: 90%;
 }
-
-.mat-form-field.stretch-height,
-.mat-form-field.stretch-height .mat-form-field-flex,
-.mat-form-field.stretch-height textarea {
-  height: 100%;
-}
-
-  .mat-form-field.stretch-height .mat-form-field-wrapper {
-    height: calc(100% - 1.34375em);
-  }
-
-  .mat-form-field.stretch-height .mat-form-field-infix {
-    height: calc(100% - 1.34375em - 2px);
-  }

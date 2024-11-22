@@ -1,21 +1,24 @@
-<div class="mb-4 h2 text-success">
-  Sign up
-</div>
 
-<div class="mb-3">
-  <input type="text" [(ngModel)] = "userName">
-</div>
 <div>
-  <p>Select A Role:</p>
-  <select [(ngModel)]="role">
-    <option value="Customer">Customer</option>
-    <option value="Librarian">Librarian</option>
-  </select>
+  <mat-form-field>
+    <mat-label>Pick a username</mat-label>
+    <input matInput type="text" [(ngModel)]="userName">
+  </mat-form-field>
+</div>
 
-  <div class="mt-4">
-    <button (click)="onSubmit()" class="btn btn-success w-100 rounded-3">
-      Sign up!
-    </button>
-  </div>
+<div>
+  <mat-form-field>
+    <mat-label>Select a role:</mat-label>
+    <mat-select [(ngModel)]="role">
+      <mat-option value="Customer">Customer</mat-option>
+      <mat-option value="Librarian">Librarian</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div>
+  <button mat-flat-button (click)="onSubmit()">
+    Sign up!
+  </button>
 </div>
 

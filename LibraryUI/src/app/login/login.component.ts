@@ -4,11 +4,14 @@ import { UserService } from '../shared/services/user.service';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RegistrationComponent, FormsModule],
+  imports: [RegistrationComponent, FormsModule, MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
