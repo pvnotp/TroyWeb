@@ -3,7 +3,6 @@ Install:
   - ASP.NET and web development  
   - Node.js development  
 - SQL Server Express  
-  - Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;  
 - Git for Windows  
 - Install Node.js 22.11.0  
 
