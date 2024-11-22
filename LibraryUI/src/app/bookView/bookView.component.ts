@@ -13,6 +13,9 @@ import { BookService } from '../shared/services/book.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../shared/services/user.service';
+import { Book } from '../shared/models/Book';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 /**
  * @title Table retrieving data through HTTP
@@ -29,13 +32,12 @@ import { UserService } from '../shared/services/user.service';
     ]),
   ],
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe],
+  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe, MatButtonModule],
 })
 export class BookViewComponent implements AfterViewInit {
-  _httpClient = inject(HttpClient);
-  displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'availability', 'checkOut'];
-  bookService: BookService = new BookService(this._httpClient);
-
+  httpClient = inject(HttpClient);
+  displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'availability', 'checkOut', 'edit'];
+  bookService: BookService = new BookService(this.httpClient);
   bookData: MatTableDataSource<Book> = new MatTableDataSource<Book>();
   expandedElement: Book | null = null;
   searchInput = new Subject<string>();
@@ -45,7 +47,7 @@ export class BookViewComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.userService.getUserId().subscribe(id => this.userId = id);
   }
 
@@ -104,7 +106,7 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   checkInBook(book: Book) {
-    this.bookService.checkInBook({ "bookId": book.id }).subscribe(() => { });
+    this.bookService.checkInBook({ "bookId": book.id }).subscribe(() => { console.log("Checked in book " + book.id) });
 
     book.checkedOutBy = "";
     book.checkOutDisabled == false; 
@@ -115,7 +117,7 @@ export class BookViewComponent implements AfterViewInit {
       "userId": this.userId,
       "bookId": book.id
     }
-    this.bookService.checkoutBook(userData).subscribe(() => { });
+    this.bookService.checkoutBook(userData).subscribe(() => { console.log("Checked out book " + book.id) });
 
     book.checkedOutBy = this.userId;
     if (this.userRole != "Librarian") {
@@ -155,25 +157,21 @@ export class BookViewComponent implements AfterViewInit {
       return "Check Out";
     }
   }
+
+  showLibrarianButton() {
+    return this.userRole == "Librarian";
+  }
+
+  setEditBook(book: Book) {
+    this.router.navigate(["/editor", {book: JSON.stringify(book)}]);
+  }
+
+  addBook() {
+    this.router.navigate(["/editor", { book: JSON.stringify(new Book())}]);
+  }
  
 }
 
-export interface Book {
-  id: string;
-  title: string;
-  coverImage: number;
-  author: number;
-  rating: string;
-  description: string;
-  publisher: string;
-  publicationDate: any;
-  category: string;
-  ISBN: string;
-  pageCount: number;
-  reviews: string[]
-  checkedOutBy: string;
-  dueDate: Date;
-  checkOutDisabled: boolean | undefined;
-}
+
 
 

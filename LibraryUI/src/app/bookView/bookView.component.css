@@ -109,3 +109,10 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
   opacity: 0.5;
 }
+
+.box2 {
+  display: inline-block;
+  width: 40%;
+  height: 100px;
+  margin: 1em;
+}

@@ -2,7 +2,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { Data } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Book } from '../models/Book'
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 export class BookService {
   constructor(private http: HttpClient) { }
   baseURL = 'http://localhost:5274/api';
-
+  editBook = new BehaviorSubject(new Book());
 
   getFeaturedBooks(): Observable<any[]> {
     return this.http.get<any[]>(this.baseURL + '/Book/getFeatured');
@@ -29,4 +30,17 @@ export class BookService {
     return this.http.post(this.baseURL + '/Book/checkIn', checkInData);
   }
 
+  updateBook(bookData: Book) {
+    return this.http.put(this.baseURL + '/Book/update', bookData);
+  }
+
+  deleteBook(bookId: string) {
+    const params = new HttpParams().set("bookId", bookId);
+    return this.http.delete(this.baseURL + '/Book/delete', { params });
+  }
+
+  addBook(bookData: Book) {
+    return this.http.post(this.baseURL + '/Book/add', bookData);
+  }
+ 
 }

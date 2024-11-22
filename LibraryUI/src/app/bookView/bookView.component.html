@@ -1,15 +1,22 @@
 <div class="example-container mat-elevation-z8">
 
+  <div class="box2">
+    <mat-form-field>
+      <mat-label>Search for your favorite titles</mat-label>
+      <input matInput (keyup)="updateSearch($event)" #input>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field>
-    <mat-label>Search for your favorite titles</mat-label>
-    <input matInput (keyup)="updateSearch($event)" #input>
-  </mat-form-field>
+  <div class="box2">
+    <mat-form-field>
+      <mat-label>Filter results by title, author, or description</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field>
-    <mat-label>Filter results by title, author, or description</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
-  </mat-form-field>
+  @if(showLibrarianButton()){
+    <button mat-flat-button (click)="addBook()">Add Book</button>
+  }
 
   <div class="example-table-container">
 
@@ -59,7 +66,21 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let row">
           <button [disabled]="checkOutDisabled(row)" (click)="checkBook(row)">
-          {{getBookCheckButtonLabel(row)}}</button></td>
+            {{getBookCheckButtonLabel(row)}}
+          </button>
+        </td>
+      </ng-container>
+
+      <!--Check Out Column-->
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          @if(showLibrarianButton()){
+          <button mat-flat-button (click)="setEditBook(row)">
+            Edit
+          </button>
+          }
+        </td>
       </ng-container>
 
 
@@ -70,7 +91,7 @@
                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
             <div class="example-element-description">
               Publisher: {{element.publisher}} <br />
-              Publication Date: {{element.publicationDate | date }} <br />
+              Publication Date: {{element.publicationDate | date}} <br />
               Category: {{element.category}} <br />
               ISBN: {{element.isbn}} <br />
               Page Count: {{element.pageCount}} <br />
@@ -89,7 +110,7 @@
 
 
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">" No data matching the filter "{{input.value}}"</td>
+        <td class="mat-cell" colspan="4">No matching data</td>
       </tr>
 
     </table>
