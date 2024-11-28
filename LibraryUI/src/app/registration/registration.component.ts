@@ -15,23 +15,38 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './registration.component.css'
 })
 export class RegistrationComponent {
-  userName: string = '';
+  email: string = '';
+  password: string = '';
   role: string = '';
+  error: string = '';
 
   @Output() registrationCompletedEvent = new EventEmitter<boolean>();
   constructor(private service: UserService) { }
 
   onSubmit() {
+
     const userData = {
-      "userName": this.userName,
+      "email": this.email,
+      "password": this.password,
       "role": this.role
     }
+
     this.service.createUser(userData)
       .subscribe({
         next: (res: any) => {
-          this.registrationCompletedEvent.emit(true);
+          //TODO: Alert user to problems with registration
+          this.service.setRole(userData)
+            .subscribe({
+              next: (res: any) => {
+                this.registrationCompletedEvent.emit(true);
+              },
+            });
         },
       });
+
+    
+
+
   }
 }
 

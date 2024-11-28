@@ -18,7 +18,7 @@ namespace Library.Controllers
         }
 
 
-        [HttpPost("signup")]
+        [HttpPost("assignRole")]
         public async Task<IActionResult> RegisterUser([FromBody] JsonObject userData)
         {
 
@@ -48,11 +48,30 @@ namespace Library.Controllers
             {
                 return BadRequest("User not found.");
             }
+            return Ok(user);
+        }
+
+        [HttpPost("setRole")]
+        public async Task<IActionResult> SetUserRole([FromBody] JsonObject userData)
+        {;
+            var user = await _userManager.FindByNameAsync(userData["email"].ToString());
+
+            if (user is null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, userData["role"].ToString());
+            if (!result.Succeeded)
+            {
+                return BadRequest($"Could not assign {userData["email"]} to role {userData["role"]}.");
+            }
 
             return Ok(user);
         }
 
-        [HttpGet("role")]
+
+        [HttpGet("getRole")]
         public async Task<IActionResult> GetUserRole(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);

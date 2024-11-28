@@ -1,8 +1,15 @@
 
 <div>
   <mat-form-field>
-    <mat-label>Pick a username</mat-label>
-    <input matInput type="text" [(ngModel)]="userName">
+    <mat-label>Enter your email</mat-label>
+    <input matInput type="text" [(ngModel)]="email">
+  </mat-form-field>
+</div>
+
+<div>
+  <mat-form-field>
+    <mat-label>Choose a password</mat-label>
+    <input matInput type="password" [(ngModel)]="password">
   </mat-form-field>
 </div>
 
@@ -21,4 +28,8 @@
     Sign up!
   </button>
 </div>
+
+<p>
+  {{ error }}
+</p>
 

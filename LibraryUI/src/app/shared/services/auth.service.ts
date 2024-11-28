@@ -5,25 +5,25 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn = false;
 
   constructor(private http: HttpClient) { }
   baseURL = 'http://localhost:5274/api';
 
   login() {
-    this.loggedIn = true;
+    return true;
   }
 
   logout() {
-    this.loggedIn = false;
+    return false;
   }
 
   isAuthenticated(): boolean {
-    return this.loggedIn;
+    return sessionStorage.getItem("loggedIn") === "true"
   }
 
   getRole(userName: string) {
     const params = new HttpParams().set("userName", userName);
     return this.http.get(this.baseURL + '/User/role', { params });
   }
+
 }

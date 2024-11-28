@@ -18,7 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 export class LoginComponent {
 
   isNewUser: boolean = false;
-  userName: string = '';
+  email: string = '';
+  password: string = '';
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
 
@@ -33,7 +34,11 @@ export class LoginComponent {
   @Output() userLoggedInEvent = new EventEmitter<string>();
 
   login() {
-    this.userService.getUser(this.userName)
+    const userData = {
+      "email": this.email,
+      "password": this.password,
+    }
+    this.userService.loginUser(userData)
       .subscribe({
         next: (res: any) => {
           this.authService.login();
@@ -42,7 +47,7 @@ export class LoginComponent {
         }
       });
 
-    this.authService.getRole(this.userName)
+    this.authService.getRole(this.email)
       .subscribe({
         next: (res: any) => {
           this.userService.setUserRole(res);

@@ -9,17 +9,20 @@ export class UserService {
 
   userId = new BehaviorSubject("");
   role = new BehaviorSubject("");
-  baseURL = 'http://localhost:5274/api';
+  baseURL = 'http://localhost:5274/';
   constructor(private http: HttpClient) { }
 
 
   createUser(userData: any) {
-    return this.http.post(this.baseURL + '/User/signup', userData);
+    return this.http.post(this.baseURL + 'register', userData);
   }
 
-  getUser(userName: string) {
-    const params = new HttpParams().set("userName", userName);
-    return this.http.get(this.baseURL + '/User/signin', { params });
+  setRole(userData: any) {
+    return this.http.post(this.baseURL + "api/User/setRole", userData);
+  }
+
+  loginUser(userData: any) {
+    return this.http.post(this.baseURL + 'login', userData);
   }
 
   setUserId(userId: string) {
