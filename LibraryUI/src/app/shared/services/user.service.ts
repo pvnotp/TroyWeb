@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
-  userId = new BehaviorSubject("");
+  user = new BehaviorSubject("");
   role = new BehaviorSubject("");
   baseURL = 'http://localhost:5274/';
   constructor(private http: HttpClient) { }
@@ -25,12 +25,17 @@ export class UserService {
     return this.http.post(this.baseURL + 'login', userData);
   }
 
-  setUserId(userId: string) {
-    this.userId.next(userId);
+  fetchUserId(userName: string) {
+    const params = new HttpParams().set("userName", userName);
+    return this.http.get(this.baseURL + 'api/User/getUser', { params, responseType: "text" });
+  }
+
+  setUserId(user: any) {
+    this.user.next(user);
   }
 
   getUserId() {
-    return this.userId.asObservable();
+    return this.user.asObservable();
   }
 
   setUserRole(role: string) {

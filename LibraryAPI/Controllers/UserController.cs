@@ -39,7 +39,7 @@ namespace Library.Controllers
         }
 
 
-        [HttpGet("signin")]
+        [HttpGet("getUser")]
         public async Task<IActionResult> GetUserByName(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
@@ -48,7 +48,7 @@ namespace Library.Controllers
             {
                 return BadRequest("User not found.");
             }
-            return Ok(user);
+            return Ok(user.Id);
         }
 
         [HttpPost("setRole")]

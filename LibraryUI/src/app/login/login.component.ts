@@ -20,6 +20,7 @@ export class LoginComponent {
   isNewUser: boolean = false;
   email: string = '';
   password: string = '';
+  userId: string = '';
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
 
@@ -42,8 +43,8 @@ export class LoginComponent {
       .subscribe({
         next: (res: any) => {
           this.authService.login();
-          this.userService.setUserId(res.id);
-          this.router.navigate(['/featured']);
+          this.userService.fetchUserId(this.email).subscribe(userId => this.userService.setUserId(userId));
+          this.router.navigate(['/bookView']);
         }
       });
 

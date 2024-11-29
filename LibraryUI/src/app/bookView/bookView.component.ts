@@ -41,13 +41,14 @@ export class BookViewComponent implements AfterViewInit {
   expandedElement: Book | null = null;
   searchInput = new Subject<string>();
   resultsLength = 0;
-  userId: string = "";
+  userEmail: string = "";
   userRole: string = "";
+  userId: string = "";
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
   constructor(private userService: UserService, private router: Router) {
-    this.userService.getUserId().subscribe(id => this.userId = id);
+
   }
 
   ngAfterViewInit() {
@@ -73,6 +74,8 @@ export class BookViewComponent implements AfterViewInit {
             this.bookData.sort = this.sort;
           });
     });
+
+
   }
 
 
@@ -87,11 +90,11 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   checkBook(book: Book) {
-    this.userService.getUserId()
-      .subscribe(
-        id => { this.userId = id }
-      );
+    this.userService.getUserId().subscribe(user => this.userId = user);
 
+    console.log(this.userEmail);
+    
+    console.log(this.userId);
     this.userService.getUserRole()
       .subscribe(
         role => { this.userRole = role }
@@ -112,11 +115,11 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   checkOutBook(book: Book) {
-    const userData = {
+    const checkOutData = {
       "userId": this.userId,
       "bookId": book.id
     }
-    this.bookService.checkoutBook(userData).subscribe(() => { console.log("Checked out book " + book.id) });
+    this.bookService.checkoutBook(checkOutData).subscribe(() => { console.log("Checked out book " + book.id) });
 
     book.checkedOutBy = this.userId;
     if (this.userRole != "Librarian") {

@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -21,7 +22,7 @@ export class RegistrationComponent {
   error: string = '';
 
   @Output() registrationCompletedEvent = new EventEmitter<boolean>();
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private router: Router) { }
 
   onSubmit() {
 
@@ -39,6 +40,7 @@ export class RegistrationComponent {
             .subscribe({
               next: (res: any) => {
                 this.registrationCompletedEvent.emit(true);
+                this.router.navigate(["/login"]);
               },
             });
         },

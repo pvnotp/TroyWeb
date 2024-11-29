@@ -13,8 +13,8 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'featured',
-    title: 'Featured Books',
+    path: 'bookView',
+    title: 'Our Collection',
     component: BookViewComponent,
     canActivate: [AuthGuard]
   },
