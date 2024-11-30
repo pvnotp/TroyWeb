@@ -21,7 +21,7 @@ export class RegistrationComponent {
   role: string = '';
   error: string = '';
 
-  @Output() registrationCompletedEvent = new EventEmitter<boolean>();
+  @Output() registrationCompletedEvent = new EventEmitter<any>();
   constructor(private service: UserService, private router: Router) { }
 
   onSubmit() {
@@ -33,18 +33,23 @@ export class RegistrationComponent {
     }
 
     this.service.createUser(userData)
-      .subscribe({
-        next: (res: any) => {
-          //TODO: Alert user to problems with registration
-          this.service.setRole(userData)
-            .subscribe({
-              next: (res: any) => {
-                this.registrationCompletedEvent.emit(true);
-                this.router.navigate(["/login"]);
-              },
-            });
-        },
-      });
+    .subscribe({
+      next: (res: any) => {
+        this.service.setRole(userData)
+          .subscribe({
+            next: (data) => {
+              this.registrationCompletedEvent.emit(userData);
+              this.router.navigate(["/login"]);
+            },
+            error: (error) => {
+              console.log(error.message);
+            }
+          });
+      },
+      error: (error) => {
+        console.log(error.error.errors.InvalidEmail[0]);
+      }
+    });
 
     
 

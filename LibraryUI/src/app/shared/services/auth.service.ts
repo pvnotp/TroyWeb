@@ -21,9 +21,9 @@ export class AuthService {
     return sessionStorage.getItem("loggedIn") === "true"
   }
 
-  getRole(userName: string) {
-    const params = new HttpParams().set("userName", userName);
-    return this.http.get(this.baseURL + '/User/role', { params });
+  getRole(userEmail: string) {
+    const params = new HttpParams().set("userEmail", userEmail);
+    return this.http.get(this.baseURL + '/User/getRole', { params });
   }
 
 }

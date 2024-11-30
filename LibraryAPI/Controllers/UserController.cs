@@ -72,9 +72,9 @@ namespace Library.Controllers
 
 
         [HttpGet("getRole")]
-        public async Task<IActionResult> GetUserRole(string userName)
+        public async Task<IActionResult> GetUserRole(string userEmail)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByEmailAsync(userEmail);
 
             if (user is null)
             {

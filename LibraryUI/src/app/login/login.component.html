@@ -1,25 +1,38 @@
 <div class="container">
   @if(isNewUser){
-  <app-registration (registrationCompletedEvent)="receiveRegistrationCompletedEvent($event)"></app-registration>
+    <app-registration (registrationCompletedEvent)="receiveRegistrationCompletedEvent($event)"></app-registration>
   }
   @else{
-  <div>
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input matInput [(ngModel)]="email">
-    </mat-form-field>
-  </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input matInput
+               [formControl]="email"
+               required />
+        @if (email.invalid) {
+          <mat-error>{{emailError()}}</mat-error>
+        }
+      </mat-form-field>
+     </div>
 
-  <div>
-    <mat-form-field>
-      <mat-label>Password</mat-label>
-      <input type="password" matInput [(ngModel)]="password">
-    </mat-form-field>
-  </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input type="password" matInput
+               [formControl]="password"
+               required />
+        @if (password.invalid) {
+          <mat-error>{{passwordError()}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-  <div>
-    <button mat-flat-button (click)="login()">Log in</button>
-    <button mat-flat-button (click)="initializeNewUserState()">Enroll New User</button>
-  </div>
-  }
+    <div>
+      <button mat-flat-button [disabled] = "email.invalid || password.invalid"
+              (click)="login()">Log in</button>
+      <button mat-flat-button (click)="initializeNewUserState()">Enroll New User</button>
+    </div>
+
+    <div class="error">{{ httpError }}</div>
+    }
 </div>
