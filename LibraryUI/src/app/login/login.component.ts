@@ -27,6 +27,8 @@ export class LoginComponent {
   passwordError = signal('');
   httpError: string = '';
 
+  @Output() userLoggedInEvent = new EventEmitter<string>();
+
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     merge(this.email.statusChanges, this.email.valueChanges)
       .subscribe(() => { 
@@ -57,11 +59,7 @@ export class LoginComponent {
 
   receiveRegistrationCompletedEvent($event: any) {
     this.isNewUser = false;
-    this.email = $event.email;
-    this.password = $event.password;
   }
-
-  @Output() userLoggedInEvent = new EventEmitter<string>();
 
   login() {
     console.log(this.email.value);
@@ -78,13 +76,17 @@ export class LoginComponent {
           this.authService.login();
           this.userService.fetchUserId(this.email.value)
             .subscribe({
-              next: userId => this.userService.setUserId(userId)
+              next: user => this.userService.setUserId(user),
+              error: error => this.httpError = error.message
             });
-          this.router.navigate(['/bookView']);
           this.authService.getRole(this.email.value)
-          .subscribe({
-            next: (role: any) => this.userService.setUserRole(role)
-          });
+            .subscribe({
+              next: (role: any) => this.userService.setUserRole(role),
+              error: error => this.httpError = error.message
+            });
+          if (this.httpError === '') {
+            this.router.navigate(['/bookView']);
+          }
         },
         error: (error) => {
           console.log(error.status);
