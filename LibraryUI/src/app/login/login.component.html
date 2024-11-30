@@ -25,8 +25,8 @@
 
   @if(isNewUser){
     <app-registration (registrationCompletedEvent)="receiveRegistrationCompletedEvent($event)"
-                      [email]="email.value"
-                      [password]="password.value"></app-registration>
+                      [email]="email"
+                      [password]="password"></app-registration>
   }
   @else{
     <div>

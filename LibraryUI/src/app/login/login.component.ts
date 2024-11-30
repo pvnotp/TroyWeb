@@ -89,7 +89,6 @@ export class LoginComponent {
           }
         },
         error: (error) => {
-          console.log(error.status);
           if (error.status == 401) {
             this.httpError = "Username or email is incorrect."
           }

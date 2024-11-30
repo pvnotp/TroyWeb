@@ -3,20 +3,24 @@
 <div>
   <mat-form-field>
     <mat-label>Select a role:</mat-label>
-    <mat-select [(ngModel)]="role">
+    <mat-select [formControl]="role" required>
       <mat-option value="Customer">Customer</mat-option>
       <mat-option value="Librarian">Librarian</mat-option>
     </mat-select>
+    @if (role.hasError('required')) {
+      <mat-error>Role is required</mat-error>
+    }
   </mat-form-field>
 </div>
 
 <div>
-  <button mat-flat-button (click)="onSubmit()">
-    Sign up!
-  </button>
+<button mat-flat-button (click)="onSubmit()"
+        [disabled]="!email.valid || !password.valid || !role.valid">
+  Sign up!
+</button>
 </div>
 
 <div class="error">
-  {{ httpError }}
+{{ httpError }}
 </div>
 
