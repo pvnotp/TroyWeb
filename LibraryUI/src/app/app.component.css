@@ -4,5 +4,22 @@ h1 {
   font-weight: 500;
   text-transform: uppercase;
   line-height: 1;
-  text-align: center;
+  align-content: center;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+}
+
+.left {
+  float: left;
+  width: 100px;
+}
+
+.right {
+  float: right;
+  width: 100px;
 }

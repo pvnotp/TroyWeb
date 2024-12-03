@@ -9,16 +9,17 @@ export class AuthService {
   constructor(private http: HttpClient) { }
   baseURL = 'http://localhost:5274/api';
 
-  login() {
-    return true;
+  setToken(token: any) {
+    localStorage.setItem("token", token["accessToken"]);
   }
 
-  logout() {
-    return false;
+  getToken() {
+    return localStorage.getItem("token");
   }
 
-  isAuthenticated(): boolean {
-    return sessionStorage.getItem("loggedIn") === "true"
+
+  revokeToken() {
+    return localStorage.removeItem("token");
   }
 
   getRole(userEmail: string) {

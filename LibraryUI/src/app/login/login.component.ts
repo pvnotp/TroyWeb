@@ -55,6 +55,7 @@ export class LoginComponent {
 
   initializeNewUserState() {
     this.isNewUser = true;
+    this.httpError = '';
   }
 
   receiveRegistrationCompletedEvent($event: any) {
@@ -69,11 +70,11 @@ export class LoginComponent {
     }
     this.userService.loginUser(userData)
       .subscribe({
-        next: (data) => {
+        next: (token: object) => {
           if (this.email.value == null) {
             return;
           }
-          this.authService.login();
+          this.authService.setToken(token);
           this.userService.fetchUserId(this.email.value)
             .subscribe({
               next: user => this.userService.setUserId(user),
