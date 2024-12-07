@@ -16,13 +16,14 @@ export const routes: Routes = [
     path: 'bookView',
     title: 'Our Collection',
     component: BookViewComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'editor',
     title: 'Book Editor',
     component: EditorComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { librarianOnly: true }
   },
   { path: '', redirectTo: 'login', pathMatch: 'full'}
 

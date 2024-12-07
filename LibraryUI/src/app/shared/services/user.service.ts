@@ -30,6 +30,11 @@ export class UserService {
     return this.http.get(this.baseURL + 'api/User/getUser', { params, responseType: "text" });
   }
 
+  fetchUserRole(userName: string) {
+    const params = new HttpParams().set("userEmail", userName);
+    return this.http.get(this.baseURL + 'api/User/getRole', { params, responseType: "text" });
+  }
+
   setUserId(user: any) {
     this.user.next(user);
   }

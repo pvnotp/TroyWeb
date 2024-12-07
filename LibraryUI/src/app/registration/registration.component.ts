@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { merge } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-registration',
@@ -47,12 +48,16 @@ export class RegistrationComponent {
               this.router.navigate(["/login"]);
             },
             error: (error) => {
-              this.httpError = "yo";
+              let errorObject = error.error.errors;
+              let firstError = Object.values(errorObject)[0];
+              this.httpError = firstError as string;
             }
           });
       },
       error: (error) => {
-        this.httpError = "hey";
+        let errorObject = error.error.errors;
+        let firstError = Object.values(errorObject)[0];
+        this.httpError = firstError as string;
       }
     });
 

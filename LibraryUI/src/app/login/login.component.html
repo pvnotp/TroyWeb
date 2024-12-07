@@ -30,11 +30,12 @@
   }
   @else{
     <div>
-      <button mat-flat-button [disabled]="email.invalid || password.invalid"
+      <button mat-flat-button color="primary" [disabled]="email.invalid || password.invalid"
               (click)="login()">
         Log in
       </button>
-      <button mat-flat-button (click)="initializeNewUserState()">Enroll New User</button>
+
+      <button mat-flat-button color="primary" (click)="initializeNewUserState()">Enroll New User</button>
     </div>
     <div class="error">{{ httpError }}</div>
   }

@@ -23,6 +23,7 @@ export class LoginComponent {
   email = new FormControl('', [Validators.email, Validators.required]);
   password = new FormControl('', [Validators.required, Validators.minLength(6)])
   userId: string = '';
+  role: string = '';
   emailError = signal('');
   passwordError = signal('');
   httpError: string = '';
@@ -31,24 +32,26 @@ export class LoginComponent {
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     merge(this.email.statusChanges, this.email.valueChanges)
-      .subscribe(() => { 
+      .subscribe(() => {
+        this.httpError = "";
         if (this.email.hasError('required')) {
           this.emailError.set('You must enter a value');
         } else if (this.email.hasError('email')) {
           this.emailError.set('Not a valid email');
         } else {
-          this.emailError.set('');
+          this.emailError.set('Try a different value');
         }
       });
 
     merge(this.password.statusChanges, this.password.valueChanges)
       .subscribe(() => {
+        this.httpError = "";
         if (this.password.hasError('required')) {
           this.passwordError.set('You must enter a value');
         } else if (this.password.hasError('minlength')) {
           this.passwordError.set('Must be at least 6 characters');
         } else {
-          this.passwordError.set('hello');
+          this.passwordError.set('Try a different value');
         }
       });
   }
@@ -80,7 +83,7 @@ export class LoginComponent {
               next: user => this.userService.setUserId(user),
               error: error => this.httpError = error.message
             });
-          this.authService.getRole(this.email.value)
+          this.userService.fetchUserRole(this.email.value)
             .subscribe({
               next: (role: any) => this.userService.setUserRole(role),
               error: error => this.httpError = error.message
@@ -94,7 +97,9 @@ export class LoginComponent {
             this.httpError = "Username or email is incorrect."
           }
           else {
-            this.httpError = error.message;
+            let errorObject = error.error.errors;
+            let firstError = Object.values(errorObject)[0];
+            this.httpError = firstError as string;
           }
         }
       });

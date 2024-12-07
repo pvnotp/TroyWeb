@@ -17,14 +17,8 @@ export class AuthService {
     return localStorage.getItem("token");
   }
 
-
   revokeToken() {
     return localStorage.removeItem("token");
-  }
-
-  getRole(userEmail: string) {
-    const params = new HttpParams().set("userEmail", userEmail);
-    return this.http.get(this.baseURL + '/User/getRole', { params });
   }
 
 }
