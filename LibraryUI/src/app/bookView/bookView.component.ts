@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, inject, OnInit } from '@angular/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { of as observableOf, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -33,7 +33,7 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, DatePipe, MatFormFieldModule, MatInputModule, MatIconModule, TitleCasePipe, MatButtonModule],
 })
-export class BookViewComponent implements AfterViewInit {
+export class BookViewComponent implements OnInit, AfterViewInit {
   httpClient = inject(HttpClient);
   displayedColumns: string[] = ['cover', 'title', 'author', 'description', 'rating', 'availability', 'checkOut', 'edit'];
   bookService: BookService = new BookService(this.httpClient);
@@ -50,7 +50,7 @@ export class BookViewComponent implements AfterViewInit {
 
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.userService.getUserId().subscribe(userId => this.userId = userId)
     this.userService.getUserRole()
       .subscribe(
@@ -63,7 +63,9 @@ export class BookViewComponent implements AfterViewInit {
           this.bookData = new MatTableDataSource(data);
           this.bookData.sort = this.sort;
         });
+  }
 
+  ngAfterViewInit(){
     this.searchInput.pipe(
       debounceTime(300)
     ).subscribe((searchTerm: string) => {

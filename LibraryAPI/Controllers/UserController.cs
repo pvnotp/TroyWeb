@@ -81,8 +81,9 @@ namespace Library.Controllers
                 return BadRequest("User not found.");
             }
             var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault();
 
-            return Ok(roles[0]);
+            return Ok(role);
         }
     }
 }
