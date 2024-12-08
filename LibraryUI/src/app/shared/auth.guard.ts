@@ -14,9 +14,10 @@ export class AuthGuard implements CanActivate {
     return this.userService.getUserRole()
       .pipe(
         map(role => {
+          console.log(role);
           if (this.authService.getToken() &&
             (!route.data['librarianOnly'] ||
-              role === 'Librarian')) {
+              role === "Librarian")) {
             return true;
           } else {
             this.router.navigate(['/login']);

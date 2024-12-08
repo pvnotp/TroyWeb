@@ -82,7 +82,7 @@ namespace Library.Controllers
             }
             var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok(roles);
+            return Ok(roles[0]);
         }
     }
 }

@@ -41,9 +41,8 @@ export class BookViewComponent implements AfterViewInit {
   expandedElement: Book | null = null;
   searchInput = new Subject<string>();
   resultsLength = 0;
-  userEmail: string = "";
-  userRole: string = "";
   userId: string = "";
+  isLibrarian: boolean = false;
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
@@ -52,10 +51,11 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.userService.getUserId().subscribe(userId => this.userId = userId)
     this.userService.getUserRole()
       .subscribe(
-        role => { this.userRole = role }
-    );
+        role => { this.isLibrarian = role === "Librarian" }
+      );
 
     this.bookService.getFeaturedBooks()
       .subscribe(
@@ -74,10 +74,7 @@ export class BookViewComponent implements AfterViewInit {
             this.bookData.sort = this.sort;
           });
     });
-
-
   }
-
 
   updateSearch(event: Event) {
     this.searchInput.next((event.target as HTMLInputElement).value);
@@ -92,15 +89,7 @@ export class BookViewComponent implements AfterViewInit {
   checkBook(book: Book) {
     this.userService.getUserId().subscribe(user => this.userId = user);
 
-    console.log(this.userEmail);
-    
-    console.log(this.userId);
-    this.userService.getUserRole()
-      .subscribe(
-        role => { this.userRole = role }
-    );
-
-    if (book.checkedOutBy && this.userRole == "Librarian") {
+    if (book.checkedOutBy && this.isLibrarian) {
       this.checkInBook(book);
     } else {
       this.checkOutBook(book);
@@ -122,7 +111,7 @@ export class BookViewComponent implements AfterViewInit {
     this.bookService.checkoutBook(checkOutData).subscribe(() => { console.log("Checked out book " + book.id) });
 
     book.checkedOutBy = this.userId;
-    if (this.userRole != "Librarian") {
+    if (this.isLibrarian) {
       book.checkOutDisabled == true;
     }
 
@@ -145,7 +134,7 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   checkOutDisabled(book: Book) {
-    if (this.userRole == "Librarian") {
+    if (this.isLibrarian) {
       return false;
     } else {
       return book.checkedOutBy ? true : book.checkOutDisabled;
@@ -153,15 +142,11 @@ export class BookViewComponent implements AfterViewInit {
   }
 
   getBookCheckButtonLabel(book: Book) {
-    if (this.userRole == "Librarian" && book.checkedOutBy) {
+    if (this.isLibrarian && book.checkedOutBy) {
       return "Check In";
     } else {
       return "Check Out";
     }
-  }
-
-  showLibrarianButton() {
-    return this.userRole == "Librarian";
   }
 
   setEditBook(book: Book) {

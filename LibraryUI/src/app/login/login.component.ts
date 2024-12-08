@@ -28,8 +28,6 @@ export class LoginComponent {
   passwordError = signal('');
   httpError: string = '';
 
-  @Output() userLoggedInEvent = new EventEmitter<string>();
-
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     merge(this.email.statusChanges, this.email.valueChanges)
       .subscribe(() => {
