@@ -14,12 +14,16 @@
     </mat-form-field>
   </div>
 
-  @if(isLibrarian){
-    <button mat-flat-button color="primary" (click)="addBook()">Add Book</button>
-  }
+
 
 
   <div class="table-container">
+
+    @if(isLibrarian){
+    <div class="add-button">
+      <button mat-flat-button color="primary" (click)="addBook()">Add Book</button>
+    </div>
+    }
 
     <table mat-table [dataSource]="bookData" multiTemplateDataRows class="table"
            matSort matSortActive="created" matSortDisableClear matSortDirection="desc">

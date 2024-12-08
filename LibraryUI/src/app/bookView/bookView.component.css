@@ -74,3 +74,6 @@ tr.book-row:not(.expanded-row):active {
   margin: 1em;
 }
 
+.add-button {
+    float: right;
+}
