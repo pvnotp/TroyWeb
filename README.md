@@ -15,3 +15,5 @@ Setup
     - ng serve    
 
 Navigate to http://localhost:4200/
+
+Note: Commits to main branch were made prior to project submission.  The "bonus" branch contains additional commits made after submission.
