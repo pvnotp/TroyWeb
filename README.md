@@ -7,7 +7,7 @@ Install:
 - Install Node.js 22.11.0  
 
 Setup  
- - From VS, clone the repo. sln should automatically open  
+ - From VS, clone the repo. The solution should automatically open.
  - Switch from https to http in toolbar
 - Start without debugging
 -  Open a terminal and go to LibraryUI folder, e.g. %UserProfile%\source\repos\TroyWeb\LibraryUI  
