@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, AfterViewInit, inject, OnInit } from '@angular/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { of as observableOf, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -16,9 +16,7 @@ import { Book } from '../shared/models/Book';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
-/**
- * @title Table retrieving data through HTTP
- */
+
 @Component({
   selector: 'bookView-component',
   styleUrl: 'bookView.component.css',
@@ -46,9 +44,7 @@ export class BookViewComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  constructor(private userService: UserService, private router: Router) {
-
-  }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.userService.getUserId().subscribe(userId => this.userId = userId)
@@ -116,7 +112,6 @@ export class BookViewComponent implements OnInit, AfterViewInit {
     if (this.isLibrarian) {
       book.checkOutDisabled == true;
     }
-
   }
 
   displayAvailability(book: Book) {
